@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script src="config.js"></script><script>if(window.PASSPORT_CONFIG?.supabaseUrl)document.documentElement.classList.add("cloud-gated")</script><title>Aangi's UK Passport</title>
+<style>
+:root{--bg:#2a1217;--burg:#6b1426;--burg2:#4a0d1a;--gold:#c9a24b;--gold2:#e8cf8a;--ivory:#f7efdc;--paper:#fbf5e6;--ink:#2b2b2e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#150a0d}}
+:root[data-theme="dark"]{--bg:#150a0d}
+*{box-sizing:border-box}html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Georgia,'Times New Roman',serif;display:flex;justify-content:center}
+#app{width:100%;max-width:520px;min-height:100vh;display:flex;flex-direction:column;padding:12px}
+.bar{display:flex;justify-content:space-between;align-items:center;color:var(--gold2);font:12px/1 system-ui,sans-serif;padding:4px 4px 10px;letter-spacing:.1em}
+.bar button{background:none;border:1px solid var(--gold);color:var(--gold2);border-radius:20px;padding:6px 10px;font-size:12px}
+.slots{display:flex;gap:6px}.slot{width:22px;height:22px;border-radius:50%;border:1.5px dashed var(--gold);display:grid;place-items:center;font-size:11px}.slot.on{border:1.5px solid var(--gold2);background:var(--gold);color:var(--burg2)}
+#stage{flex:1;perspective:1400px;position:relative}
+.sc{display:none;min-height:70vh;border-radius:6px 14px 14px 6px;padding:22px 20px 26px;box-shadow:0 12px 40px #0008;transform-origin:left center;position:relative}
+.sc.on{display:block}
+.sc.fn{animation:fn .55s ease}.sc.fp{animation:fp .55s ease;transform-origin:right center}
+@keyframes fn{from{transform:rotateY(-80deg);opacity:.2}to{transform:none;opacity:1}}
+@keyframes fp{from{transform:rotateY(80deg);opacity:.2}to{transform:none;opacity:1}}
+.cover{background:linear-gradient(145deg,var(--burg),var(--burg2));color:var(--gold2);text-align:center;display:none;flex-direction:column;justify-content:center;align-items:center;gap:14px;border:2px solid var(--gold)}
+.cover.on{display:flex}
+.cover .crest{font-size:64px}.cover h1{font-size:34px;letter-spacing:.14em;margin:0;color:var(--gold);text-shadow:0 1px 0 #000a}
+.cover small{letter-spacing:.3em;font-size:11px}.cover p{max-width:280px;font-style:italic;opacity:.9;margin:0}
+.cover .nm{border:1px solid var(--gold);padding:8px 18px;letter-spacing:.25em;font-size:13px}
+.btn{background:var(--gold);color:var(--burg2);border:0;border-radius:30px;padding:13px 26px;font:700 14px system-ui,sans-serif;letter-spacing:.06em;cursor:pointer}
+.paper{background:var(--paper);background-image:repeating-linear-gradient(0deg,transparent 0 27px,#c9a24b22 27px 28px)}
+.hd{font:11px system-ui,sans-serif;letter-spacing:.2em;color:var(--burg);display:flex;justify-content:space-between}
+h2{color:var(--burg);margin:8px 0 4px;font-size:25px}
+.pr{margin:0 0 12px;color:#5a4b3f;font-style:italic}
+textarea{width:100%;min-height:130px;border:1px solid #c9a24b88;background:#fffdf5;border-radius:8px;padding:10px;font:17px/1.5 'Segoe Script','Bradley Hand',cursive,Georgia;color:var(--ink);resize:vertical}
+.ph{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin:12px 0}
+.ph div{position:relative;aspect-ratio:1;background:#fff;padding:5px 5px 18px;box-shadow:0 2px 6px #0003;transform:rotate(-1.5deg)}.ph div:nth-child(even){transform:rotate(1.5deg)}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ph b{position:absolute;top:-6px;right:-6px;background:var(--burg);color:#fff;border-radius:50%;width:22px;height:22px;text-align:center;line-height:22px;font:12px system-ui;cursor:pointer}
+.add{display:inline-block;border:1.5px dashed var(--burg);color:var(--burg);border-radius:30px;padding:9px 16px;font:600 13px system-ui,sans-serif;cursor:pointer}
+.ms{background:var(--burg);color:var(--ivory);border-radius:10px;padding:14px;margin:6px 0 12px;position:relative;overflow:hidden}
+.ms em{font:11px system-ui;letter-spacing:.2em;color:var(--gold2);font-style:normal}.ms h3{margin:4px 0;color:var(--gold2)}.ms p{margin:6px 0;font-size:15px}
+.ms .btn{margin-top:6px;font-size:12px;padding:9px 16px}.ms .btn:disabled{opacity:.4}
+.stamp{position:absolute;right:10px;bottom:8px;width:104px;height:104px;border:3px double #b3202f;color:#b3202f;border-radius:50%;display:grid;place-items:center;text-align:center;font:700 11px/1.3 system-ui;letter-spacing:.08em;transform:rotate(-14deg);background:#fbf5e6e6;animation:st .5s cubic-bezier(.2,2,.4,1)}
+@keyframes st{from{transform:scale(3) rotate(-14deg);opacity:0}to{transform:scale(1) rotate(-14deg);opacity:1}}
+.id{background:var(--ivory);text-align:left}
+.id .row{display:flex;gap:16px;margin-top:14px}
+.idp{width:120px;height:150px;border:2px solid var(--burg);background:#fff;display:grid;place-items:center;text-align:center;font:11px system-ui;color:var(--burg);cursor:pointer;overflow:hidden;flex:none}.idp img{width:100%;height:100%;object-fit:cover}
+.id dl{margin:0;font:12px system-ui}.id dt{color:#8a7a6a;letter-spacing:.15em;font-size:10px;margin-top:8px}.id dd{margin:0;font:700 16px Georgia;color:var(--burg)}
+.mrz{margin-top:18px;font:11px monospace;color:#555;word-break:break-all;opacity:.7}
+.out{background:var(--paper);text-align:center}.out h1{color:var(--burg);font-size:30px}.out p{font-size:17px;line-height:1.6}
+.sp{position:absolute;pointer-events:none;color:var(--gold);animation:sp 1s ease-out forwards}
+@keyframes sp{to{transform:translate(var(--x),var(--y)) scale(0);opacity:0}}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:12px 4px 4px;font:13px system-ui;color:var(--gold2)}
+.nav button{background:var(--gold);border:0;border-radius:30px;padding:10px 20px;font-weight:700;color:var(--burg2)}.nav button:disabled{opacity:.3}
+.hide{display:none!important}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#000c;color:#fff;padding:8px 14px;border-radius:20px;font:13px system-ui;opacity:0;transition:.3s;pointer-events:none}#toast.on{opacity:1}
+@media print{body{background:#fff}.bar,.nav,.add,.ph b,#toast,.btn{display:none!important}.sc{display:block!important;break-after:page;box-shadow:none;min-height:0;animation:none!important}#app{max-width:none}}
+
+/* Birthday edition, chapter two */
+body{background:radial-gradient(ellipse at 50% 10%,#642c3a 0,#29141c 48%,#160d12 100%);background-attachment:fixed}
+#app{max-width:1120px;padding:24px 28px 16px;gap:8px}
+.bar{padding:0 4px 16px;gap:12px;flex-wrap:wrap;line-height:1.5}
+.bar button,.nav button,.add,.btn{cursor:pointer;transition:transform .2s,background .2s}
+button:hover,.add:hover{transform:translateY(-2px)}
+button:focus-visible,textarea:focus-visible,select:focus-visible,.add:focus-within,.idp:focus-within{outline:3px solid #d99c4b;outline-offset:4px}
+#stage{display:grid;grid-template-columns:1fr;gap:0;max-width:960px;width:100%;margin:auto}
+.sc{min-height:650px;padding:36px 34px 44px;border-radius:4px 16px 16px 4px;box-shadow:0 16px 55px #0006}
+.cover{width:440px;max-width:100%;margin:12px auto;border:1px solid #b99650;outline:1px solid #c9a24b66;outline-offset:-14px;background:radial-gradient(ellipse at 30% 0%,#872c40,#570f24 60%,#390d1a);gap:26px}
+.cover h1{font-size:39px;letter-spacing:.12em}.cover .crest{font-size:62px}.cover .nm{border:0;border-block:1px solid #c9a24b77;padding:14px 10px}.cover small{line-height:1.8}
+.paper,.id{background-color:#fbf3df;background-image:radial-gradient(ellipse at 100% 0%,#dfc99733,transparent 65%),repeating-linear-gradient(0deg,transparent 0 31px,#bd9b4a16 31px 32px)}
+h2{font-size:29px;margin:24px 0 12px;line-height:1.15}.hd{font-size:9px;line-height:1.6;gap:12px}.pr{font-size:15px;line-height:1.6}
+textarea{min-height:180px;border:0;border-bottom:1px solid #bba37766;background:#fffaf033;border-radius:0;padding:12px 0;line-height:1.9;font-family:Georgia,serif}
+.ph{gap:16px;margin:24px 0}.ph div{aspect-ratio:auto;min-height:150px;padding:7px 7px 36px}.ph img{height:160px}.photo-tools{position:absolute;bottom:5px;left:0;right:0;display:flex;justify-content:center;gap:5px}.photo-tools button{border:0;background:#f5eddc;color:#64162b;border-radius:4px;padding:5px 7px;cursor:pointer;font-size:11px}
+.add{border-radius:5px;font-size:12px;padding:11px 16px;background:#f7efdf80}.ms{border-radius:4px;padding:20px}.ms p{line-height:1.6}.ms .stamp{position:relative;margin:12px auto 0;right:auto;bottom:auto;width:112px;height:112px}.id .row{margin-top:40px}.idp{border:1px solid #b59b65;box-shadow:0 5px 12px #39210e18}.id dt{margin-top:14px}.out p{font-size:16px;line-height:1.8}.out h1{margin-top:30px}
+.nav{gap:14px;padding-top:16px}.nav button{padding:12px 22px}.nav select{max-width:230px;width:100%;border:1px solid #c9a24b77;color:#ebd2a0;background:#351622;border-radius:6px;padding:10px;font:12px system-ui}
+#utility{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:8px;color:#d4bd91;font:11px/1.5 system-ui;text-align:center}#utility button,#utility label{font:inherit;background:transparent;border:0;border-bottom:1px solid #aa874755;padding:4px;color:inherit;cursor:pointer}#save-status{width:100%;opacity:.8}
+.page-foot{position:absolute;bottom:17px;left:30px;right:30px;color:#987d56;display:flex;justify-content:space-between;font:9px system-ui;letter-spacing:.18em}
+@media(min-width:850px){#stage.spread{grid-template-columns:1fr 1fr}.spread .sc.on:nth-of-type(even){border-radius:14px 0 0 14px;box-shadow:inset -16px 0 18px -20px #452319,0 16px 55px #0005}.spread .sc.on:nth-of-type(odd){border-radius:0 14px 14px 0;box-shadow:inset 16px 0 18px -20px #452319,0 16px 55px #0005}#stage:not(.spread){max-width:490px}}
+@media(max-width:849px){#app{max-width:540px;padding:15px 12px}.sc{min-height:calc(100svh - 185px);padding:28px 22px 44px}.cover{min-height:650px;margin:4px auto}.bar{font-size:10px;padding-bottom:5px}.cover h1{font-size:35px}.nav select{max-width:160px}.nav button{padding:11px 12px;font-size:12px}.id .row{gap:12px}.idp{width:105px;height:140px}}
+@media(max-width:370px){.id .row{flex-direction:column}.hd{font-size:8px}.nav select{max-width:120px}.cover h1{font-size:29px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media print{@page{size:A5;margin:12mm}body{display:block;background:white}#app{display:block;padding:0;max-width:none}#stage,#stage.spread{display:block!important;max-width:none}#utility,.photo-tools,.nav,.bar{display:none!important}.sc{min-height:0;break-after:page;border-radius:0;box-shadow:none!important;padding:20px 10px 40px;width:100%;outline:0}.cover{min-height:180mm;margin:0;print-color-adjust:exact;-webkit-print-color-adjust:exact}.sc:last-child{break-after:auto}.print-note{white-space:pre-wrap;overflow-wrap:anywhere;font:16px/1.8 Georgia;color:#2b2b2e;min-height:80px}.ph div{break-inside:avoid;transform:none}.ph img{height:150px}.ms{print-color-adjust:exact;-webkit-print-color-adjust:exact}.page-foot{position:static;margin-top:30px}}
+
+.cloud-gated #app{visibility:hidden}.cloud-panel{position:fixed;inset:0;z-index:30;background:#28131bf5;display:grid;place-items:center;padding:20px;color:#f8edda;font-family:Georgia,serif}.cloud-panel article{width:100%;max-width:440px;border:1px solid #c9a24b80;padding:32px;border-radius:12px;background:#431b2b}.cloud-panel h2{color:#e8cf8a;font-size:28px}.cloud-panel p{line-height:1.6}.cloud-panel input{width:100%;padding:12px;border:1px solid #c9a24b;border-radius:5px;font:16px system-ui;margin:10px 0}.cloud-panel button{margin:8px 6px 0 0}.cloud-panel .message{font:14px/1.5 system-ui;color:#e8cf8a}.cloud-panel label{font:13px system-ui}.cloud-panel[hidden]{display:none}#cloud-tools{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}#cloud-message{width:100%;font:12px system-ui;color:#e8cf8a;text-align:center;padding:6px}@media print{.cloud-panel,#cloud-tools{display:none!important}}
+</style></head><body>
+<div id="app">
+<div class="bar"><span>🇬🇧 UNITED KINGDOM EDITION</span><div class="slots" id="slots"></div><button id="mute" aria-label="Toggle stamp sound">🔊</button></div>
+<div id="stage"></div>
+<div class="nav hide" id="nav"><button id="pv">← Prev</button><select id="jump" aria-label="Go to passport page"></select><span id="ind" class="hide"></span><button id="nx">Next →</button></div>
+<div id="utility"><span id="save-status" role="status">Opening your journal…</span><button id="backup">Download backup</button><button id="restore">Restore backup</button><button id="print-any">Print / save PDF</button></div></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<input id="restore-input" type="file" accept="application/json,.json" hidden>
+<script>/* Storage recovery is initialized below. */</script>
+<script>
+const P=[["Hello, United Kingdom","Write your first impressions."],["Touchdown","Add an arrival photo and a note."],["First Little Adventure","Open diary space — what did you do first?"],["Mission 1","m"],["Today's Little Adventure","Your favourite moment goes here."],["The Food Diaries","Foods, cafés, and ratings ★★★★★"],["Dear Diary","A completely blank page. Write anything."],["Postcards to Myself","Write a message to future Aangi."],["Mission 2","m"],["A Day Worth Keeping","Add as many photos as you like."],["Little Things I Loved","Favourite little details."],["Just Another Page","Blank. Yours."],["The Photo Dump","Free photo gallery."],["Favourite Outfit","Outfit picture + a short caption."],["Mission 3","m"],["Places and Faces","Photos and names."],["Something Funny Happened","Write the story."],["The Best Day","Your favourite-day memory."],["My UK Highlights","Three favourite trip moments."],["One Last Memory","A closing photograph and reflection."]];
+const M={4:{k:"EXPLORER",t:"London Calling ☎️",d:"Find an iconic red London telephone booth or red double-decker bus. Take a dramatic main-character photo with it.",s:"CERTIFIED<br>LONDON GIRL"},9:{k:"COLLECTOR",t:"The British Treasure 🗝️",d:"Find something in London that makes you smile — a shop window, a book, street art. Photograph it and explain why you chose it.",s:"TREASURE<br>HUNTER"},15:{k:"MEMORY MAKER",t:"The Unexpected Moment ✨",d:"Capture one moment that wasn't planned but turned out to be special. Write what happened and why you want to remember it.",s:"MEMORY<br>KEEPER"}};
+let KEY='aangi-uk-passport-v1';let stateKey='state',cloudMeta={revision:0,dirty:false};let S={cur:0,t:{},p:{},m:{},mute:false};
+try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const $=s=>document.querySelector(s),st=$('#stage'),N=23;
+function toast(m){const t=$('#toast');t.textContent=m;t.className='on';setTimeout(()=>t.className='',2200)}
+let tm;function legacySave(){clearTimeout(tm);tm=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('Storage is full — export your PDF soon!')}},300)}
+function thud(){if(S.mute)return;try{const a=new(window.AudioContext||webkitAudioContext)(),o=a.createOscillator(),g=a.createGain(),t=a.currentTime;o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(40,t+.15);g.gain.setValueAtTime(.12,t);g.gain.exponentialRampToValueAtTime(.001,t+.2);o.connect(g);g.connect(a.destination);o.start();o.stop(t+.2);o.onended=()=>a.close()}catch(e){}}
+function legacyPh(k){return `<div class="ph" data-k="${k}">${(S.p[k]||[]).map((u,i)=>`<div><img src="${u}" alt=""><b data-i="${i}">×</b></div>`).join('')}</div><label class="add">+ Add photo<input type="file" accept="image/*" multiple hidden data-k="${k}"></label>`}
+function build(){let h=`<section class="sc cover on"><div class="crest">👑</div><small>THE UNITED KINGDOM EDITION</small><h1>AANGI'S<br>PASSPORT</h1><p>A collection of little adventures, big memories, and beautiful moments.</p><div class="nm">AANGI SIROYA</div><small>Birthday Special • 2026</small><button class="btn" id="open">Open My Passport</button></section>`;
+h+=`<section class="sc id"><div class="hd"><span>AANGI AIRWAYS • PERSONAL TRAVEL DOCUMENT</span><span>🇬🇧</span></div><div class="row"><label class="idp" id="idp"><input type="file" accept="image/*" aria-label="Add passport holder photo" hidden data-k="id" data-one="1">${S.p.id&&S.p.id[0]?`<img src="${S.p.id[0]}" alt="">`:'Tap to add<br>her photo'}</label><dl><dt>PASSPORT HOLDER</dt><dd>Aangi Siroya</dd><dt>CLASS</dt><dd>Main Character</dd><dt>DESTINATION</dt><dd>United Kingdom 🇬🇧</dd><dt>VALIDITY</dt><dd>Memories Never Expire</dd></dl></div><p style="margin-top:20px;font-style:italic;color:var(--burg)">Officially licensed to make unforgettable memories.</p><p style="font-size:15px">Happy Birthday, Aangi! ♡ Your passport is empty — fill it with pictures, thoughts and stories. This is a shared passport: anyone with the link can view and edit it. Your memories save to the cloud when connected. Offline drafts stay on this device until they sync. Download a backup anytime.</p><div class="mrz">P&lt;GBRSIROYA&lt;&lt;AANGI&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>MEMORIES&lt;NEVER&lt;EXPIRE&lt;2026&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div><p style="font:11px system-ui;color:#8a7a6a">Not a real government document — a birthday travel journal.</p></section>`;
+P.forEach((p,i)=>{const n=i+1,m=M[n],k='p'+n;h+=`<section class="sc paper" data-n="${n}"><div class="hd"><span>AANGI'S TRAVEL JOURNAL</span><span>PAGE ${String(n).padStart(2,'0')} / 20</span></div>`;
+if(m){const d=S.m[n];h+=`<h2>${m.t}</h2><div class="ms"><em>MISSION 0${[4,9,15].indexOf(n)+1} • ${m.k}</em><p>${m.d}</p><button class="btn" data-m="${n}" ${d?'disabled':''}>${d?'Completed ✓':'Complete Mission'}</button>${d?`<div class="stamp"><div>${m.s}<br>★<br>${String(d).replace(/[<>"&]/g,'')}</div></div>`:''}</div><p class="pr">Add a photo or write a note, then complete the mission.</p>`}else h+=`<h2>${p[0]}</h2><p class="pr">${p[1]}</p>`;
+h+=`<textarea data-k="t${n}" placeholder="Write here…"></textarea>${ph(k)}</section>`});
+h+=`<section class="sc out paper"><h1>Dear Aangi,</h1><p>I wanted to gift you something that wouldn't just last for your birthday, but would stay with you long after your trip was over.</p><p>So here's a little passport for all the places you'll see, all the memories you'll make, and all the little moments worth keeping.</p><p>Fill it with pictures, random thoughts, funny stories, and absolutely anything that makes you happy.</p><p>And years from now, when you look back at these pages, I hope they remind you of just how beautiful this chapter of your life was.</p><h2 style="font-size:28px">Happy Birthday, Aangi! ♡</h2><p style="font-style:italic;color:#7a6a5a">The best souvenirs are the memories you bring home.</p><button class="btn" id="pdf">Download as PDF</button></section>`;
+st.innerHTML=h;st.querySelectorAll('textarea').forEach(t=>t.value=S.t[t.dataset.k.slice(1)]||S.t[t.dataset.k]||'');slots()}
+function slots(){$('#slots').innerHTML=[4,9,15].map(n=>`<span class="slot ${S.m[n]?'on':''}">${S.m[n]?'★':''}</span>`).join('')}
+function legacyShow(i,d){const ss=st.children;S.cur=i=Math.max(0,Math.min(N-1,i));[...ss].forEach((s,j)=>{s.classList.toggle('on',j===i);s.classList.remove('fn','fp')});const c=ss[i];if(d){void c.offsetWidth;c.classList.add(d>0?'fn':'fp')}
+$('#nav').classList.toggle('hide',i===0);$('#ind').textContent=i<2?'Identity':i>21?'The End':`${i-1} / 20`;$('#pv').disabled=i===0;$('#nx').disabled=i===N-1;scrollTo(0,0);save()}
+function compress(f){return new Promise(r=>{const i=new Image(),u=URL.createObjectURL(f);i.onload=()=>{const s=Math.min(1,800/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*s;c.height=i.height*s;c.getContext('2d').drawImage(i,0,0,c.width,c.height);URL.revokeObjectURL(u);r(c.toDataURL('image/jpeg',.65))};i.onerror=()=>{URL.revokeObjectURL(u);r(null)};i.src=u})}
+function sparkle(el){const r=el.getBoundingClientRect(),b=st.getBoundingClientRect();for(let i=0;i<14;i++){const s=document.createElement('span');s.className='sp';s.textContent='✦';s.style.cssText=`left:${r.left-b.left+r.width/2}px;top:${r.top-b.top+r.height/2}px;--x:${(Math.random()-.5)*160}px;--y:${(Math.random()-.5)*160}px`;st.appendChild(s);setTimeout(()=>s.remove(),1000)}}
+st.addEventListener('input',e=>{if(e.target.closest('textarea,button,label,.ph')){S.t[e.target.dataset.k]=e.target.value;save()}});
+st.addEventListener('change',async e=>{const k=e.target.dataset.k;if(!k||!e.target.files)return;for(const f of e.target.files){const u=await compress(f);if(u){if(e.target.dataset.one)S.p[k]=[u];else(S.p[k]=S.p[k]||[]).push(u)}}save();const cur=S.cur,ts=[...st.querySelectorAll('textarea')].map(t=>t.value);build();decorate();st.querySelectorAll('textarea').forEach((t,i)=>t.value=ts[i]);show(cur,0)});
+st.addEventListener('click',e=>{const t=e.target;if(t.id==='open'){thud();show(1,1)}
+else if(t.id==='pdf'){exportPrint()}
+else if(t.tagName==='B'&&t.dataset.i){const k=t.closest('.ph').dataset.k;S.p[k].splice(+t.dataset.i,1);t.parentNode.remove();save()}
+else if(t.dataset.m){const n=t.dataset.m;if(!(S.t['t'+n]||'').trim()&&!(S.p['p'+n]||[]).length){toast('Add a photo or a note first ✨');return}
+S.m[n]=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();save();const sec=t.closest('.sc'),ts=[...st.querySelectorAll('textarea')].map(x=>x.value);build();decorate();st.querySelectorAll('textarea').forEach((x,i)=>x.value=ts[i]);show(S.cur,0);thud();sparkle(st.querySelector('.stamp'))}});
+$('#nx').onclick=()=>show(S.cur+1,1);$('#pv').onclick=()=>show(S.cur-1,-1);
+$('#mute').onclick=()=>{S.mute=!S.mute;$('#mute').textContent=S.mute?'🔇':'🔊';save()};$('#mute').textContent=S.mute?'🔇':'🔊';
+let x0=null,y0=null;st.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});st.addEventListener('touchend',e=>{if(x0==null||S.cur===0||e.target.closest('textarea,button,label,.ph'))return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>70&&Math.abs(e.changedTouches[0].clientY-y0)<60)navigate(dx<0?1:-1);x0=null});
+/* Start after storage recovery. */
+
+let db=null,saveQueue=Promise.resolve(),lastSaved='',storageMode='opening',uploadBusy=false;
+const statusEl=document.querySelector('#save-status');
+function status(msg){statusEl.textContent=msg}
+function validState(v){
+ if(!v||typeof v!=='object'||Array.isArray(v))throw Error('Invalid journal');
+ const out={cur:Number.isInteger(v.cur)?Math.max(0,Math.min(22,v.cur)):0,t:{},p:{},m:{},mute:!!v.mute};
+ for(let n=1;n<=20;n++){const t=v.t?.['t'+n]??v.t?.[n];if(typeof t==='string')out.t['t'+n]=t.slice(0,100000)}
+ for(const k of ['id',...Array.from({length:20},(_,i)=>'p'+(i+1))]){const a=v.p?.[k];if(Array.isArray(a)){if(a.some(x=>typeof x!=='string'||!/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(x)))throw Error('Invalid photo');out.p[k]=a.slice(0,k==='id'?1:100)}}
+ for(const n of [4,9,15])if(typeof v.m?.[n]==='string')out.m[n]=v.m[n].slice(0,40);
+ return out;
+}
+function save(){window.onPassportChange?.();clearTimeout(tm);status('Saving on this browser…');tm=setTimeout(persist,220)}
+function persist(){
+ clearTimeout(tm);const snapshot=JSON.stringify({state:S,meta:cloudMeta,savedAt:Date.now()});
+ saveQueue=saveQueue.catch(()=>{}).then(async()=>{
+  try{if(db){await new Promise((resolve,reject)=>{const tx=db.transaction('journal','readwrite');tx.objectStore('journal').put(JSON.parse(snapshot),stateKey);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error)})}
+  else localStorage.setItem(KEY,JSON.stringify(JSON.parse(snapshot).state));
+  try{const pending=JSON.parse(localStorage.getItem(KEY+'-pending')||'null');if(pending&&pending.savedAt<=JSON.parse(snapshot).savedAt)localStorage.removeItem(KEY+'-pending')}catch{}
+  lastSaved=snapshot;status('Saved on this browser · '+(navigator.onLine?'backup recommended':'offline'));
+  }catch(e){status('Could not save · download a backup now');toast('Saving failed. Download a backup to keep your entries.');throw e}
+ });saveQueue.catch(()=>{});return saveQueue;
+}
+function ph(k){return `<div class="ph" data-k="${k}">${(S.p[k]||[]).map((u,i)=>`<div><img src="${u}" alt="Travel memory ${i+1}"><div class="photo-tools"><button data-photo="rotate" data-index="${i}" aria-label="Rotate photo ${i+1}">↻</button><button data-photo="replace" data-index="${i}">Replace</button><button data-photo="remove" data-index="${i}">Remove</button></div></div>`).join('')}</div><label class="add">+ Add a memory photo<input type="file" accept="image/*" multiple hidden data-k="${k}"></label>`}
+function show(i,d){
+ if(uploadBusy)return;
+ const ss=st.querySelectorAll(':scope > section'),wide=matchMedia('(min-width:850px)').matches;
+ S.cur=i=Math.max(0,Math.min(N-1,Number(i)||0));
+ const first=wide&&i>=1&&i<=20?(i%2?i:i-1):i;
+ st.classList.toggle('spread',wide&&first>=1&&first<=19);
+ ss.forEach((s,j)=>{const visible=j===first||(wide&&first>=1&&first<=19&&j===first+1);s.classList.toggle('on',visible);s.classList.remove('fn','fp');if(visible&&d){void s.offsetWidth;s.classList.add(d>0?'fn':'fp')}});
+ $('#nav').classList.toggle('hide',i===0);$('#pv').disabled=i===0;$('#nx').disabled=i===22;$('#jump').value=String(i);save();
+}
+function redraw(){build();decorate();show(S.cur,0)}
+function decorate(){
+ st.querySelectorAll('textarea').forEach((el,i)=>el.setAttribute('aria-label',P[i][0]+' memory'));
+ st.querySelectorAll('.paper:not(.out)').forEach(el=>{const f=document.createElement('div');f.className='page-foot';f.innerHTML='<span>ONE MEMORY AT A TIME ♡</span><span>'+String(el.dataset.n).padStart(2,'0')+'</span>';el.appendChild(f)});
+ $('#jump').innerHTML=['Cover','Identity',...P.map((p,i)=>String(i+1).padStart(2,'0')+' · '+(M[i+1]?.t||p[0])),'Birthday letter'].map((x,i)=>`<option value="${i}">${x}</option>`).join('');
+}
+function navigate(dir){const wide=matchMedia('(min-width:850px)').matches;let n=S.cur;if(wide&&n>=1&&n<=20){const base=n%2?n:n-1;n=dir>0?base+2:base-2;if(n<1)n=0}else n+=dir;show(n,dir)}
+$('#nx').onclick=()=>navigate(1);$('#pv').onclick=()=>navigate(-1);$('#jump').onchange=e=>show(+e.target.value,1);
+addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT|BUTTON/.test(document.activeElement.tagName)||e.ctrlKey||e.metaKey||e.altKey)return;if(e.key==='ArrowRight'){e.preventDefault();navigate(1)}if(e.key==='ArrowLeft'){e.preventDefault();navigate(-1)}});
+matchMedia('(min-width:850px)').addEventListener('change',()=>show(S.cur,0));
+st.addEventListener('click',async e=>{
+ const b=e.target.closest('[data-photo]');if(!b)return;const k=b.closest('.ph').dataset.k,i=+b.dataset.index,action=b.dataset.photo;
+ if(action==='remove'){S.p[k].splice(i,1);redraw();return}
+ if(action==='rotate'){const img=new Image();img.src=S.p[k][i];await img.decode();const c=document.createElement('canvas');c.width=img.height;c.height=img.width;const ctx=c.getContext('2d');ctx.translate(c.width/2,c.height/2);ctx.rotate(Math.PI/2);ctx.drawImage(img,-img.width/2,-img.height/2);S.p[k][i]=c.toDataURL('image/jpeg',.85);redraw();return}
+ if(action==='replace'){const input=document.createElement('input');input.type='file';input.accept='image/*';input.onchange=async()=>{if(!input.files[0])return;const u=await compress(input.files[0]);if(!u){toast('This photo could not be opened. Try a JPEG or PNG.');return}S.p[k][i]=u;redraw()};input.click()}
+});
+// Capture prevents navigation and duplicate handlers while uploads are being processed.
+st.addEventListener('change',async e=>{
+ if(!e.target.files||!e.target.dataset.k)return;e.stopImmediatePropagation();uploadBusy=true;status('Adding photos…');
+ try{const k=e.target.dataset.k,one=e.target.dataset.one;for(const f of Array.from(e.target.files)){if(f.size>30*1024*1024){toast('Choose a photo smaller than 30 MB.');continue}const u=await compress(f);if(!u){toast('Could not open '+f.name+'. Try JPEG or PNG.');continue}if(one)S.p[k]=[u];else(S.p[k]??=[]).push(u)}}
+ finally{uploadBusy=false;redraw()}
+},true);
+$('#backup').onclick=()=>{const blob=new Blob([JSON.stringify({format:'aangi-passport',version:2,exportedAt:new Date().toISOString(),state:S})],{type:'application/json'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='aangi-passport-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),2000);toast('Backup downloaded with notes, photos and stamps.')};
+$('#restore').onclick=()=>$('#restore-input').click();
+$('#restore-input').onchange=async e=>{try{const f=e.target.files[0];if(!f)return;if(f.size>150*1024*1024)throw Error('Too large');const data=JSON.parse(await f.text());if(data.format!=='aangi-passport'||data.version!==2)throw Error('Unknown backup');const next=validState(data.state);if(!confirm('Replace the journal on this browser with this backup? Download a backup first if you want to keep the current entries.'))return;S=next;redraw();await persist();$('#mute').textContent=S.mute?'🔇':'🔊';toast('Journal restored.')}catch(err){toast('Could not restore this backup. Current entries are unchanged.')}finally{e.target.value=''}};
+function preparePrint(){st.querySelectorAll('textarea').forEach(t=>{if(t.nextElementSibling?.classList.contains('print-note'))return;const p=document.createElement('div');p.className='print-note';p.textContent=t.value||' ';t.after(p);t.classList.add('hide')})}
+function finishPrint(){st.querySelectorAll('.print-note').forEach(p=>p.remove());st.querySelectorAll('textarea').forEach(t=>t.classList.remove('hide'))}
+function exportPrint(){if(uploadBusy){toast('Wait for photos to finish adding.');return}preparePrint();toast('Choose Save as PDF in the print dialog.');setTimeout(()=>window.print(),250)}
+$('#print-any').onclick=exportPrint;addEventListener('beforeprint',preparePrint);addEventListener('afterprint',finishPrint);
+function emergencySave(){try{localStorage.setItem(KEY+'-pending',JSON.stringify({state:S,meta:cloudMeta,savedAt:Date.now()}))}catch{}persist().catch(()=>{})}
+addEventListener('pagehide',emergencySave);addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')emergencySave()});
+addEventListener('online',()=>status('Saved on this browser · backup recommended'));addEventListener('offline',()=>status('Offline · entries save on this browser'));
+window.passportReady=(async()=>{
+ try{S=validState(S)}catch{S={cur:0,t:{},p:{},m:{},mute:false}}
+ try{db=await new Promise((resolve,reject)=>{const r=indexedDB.open('aangi-passport-v2',1);r.onupgradeneeded=()=>r.result.createObjectStore('journal');r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)});const stored=await new Promise((resolve,reject)=>{const tx=db.transaction('journal');const r=tx.objectStore('journal').get('state');r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)});
+ // The old key also holds an emergency snapshot on page exit; use it when newer.
+ if(stored)S=validState(stored.state||stored);
+ try{const emergency=JSON.parse(localStorage.getItem(KEY+'-pending')||'null');if(emergency?.state&&emergency.savedAt>(stored?.savedAt||0))S=validState(emergency.state)}catch{}
+ }catch{db=null}
+ redraw();$('#mute').textContent=S.mute?'🔇':'🔊';
+})();
+
+window.passportBridge={
+ getState:()=>structuredClone(S),getMeta:()=>({...cloudMeta}),
+ setMeta:meta=>{cloudMeta={...cloudMeta,...meta}},
+ validate:validState,
+ replace:async(state,meta)=>{S=validState(state);cloudMeta={...meta};redraw();await persist()},
+ flush:persist,
+ async scope(uid){clearTimeout(tm);await persist().catch(()=>{});KEY='aangi-passport-'+uid;stateKey=uid;let stored;
+  if(db)stored=await new Promise((resolve,reject)=>{const r=db.transaction('journal').objectStore('journal').get(stateKey);r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)});
+  else{try{const raw=localStorage.getItem(KEY);if(raw)stored={state:JSON.parse(raw),meta:{revision:0,dirty:true}}}catch{}}
+  try{const pending=JSON.parse(localStorage.getItem(KEY+'-pending')||'null');if(pending&&pending.savedAt>(stored?.savedAt||0))stored=pending}catch{}
+  S=stored?validState(stored.state):{cur:0,t:{},p:{},m:{},mute:false};cloudMeta=stored?.meta||{revision:0,dirty:false};redraw();return !!stored;
+ }
+};
+</script><script type="module" src="cloud.js"></script></body></html>
